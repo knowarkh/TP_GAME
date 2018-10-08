@@ -10,6 +10,7 @@
 public class Game {
     private Parser parser;
     private Room currentRoom;
+    private CommandWords cw = new CommandWords();
 
     /**
      * Create the game and initialise its internal map.
@@ -33,11 +34,14 @@ public class Game {
         office = new Room("in the computing admin office");
 
         // initialise room exits
-        outside.setExits(null, theatre, lab, pub);
-        theatre.setExits(null, null, null, outside);
-        pub.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
+        outside.setExit("east", theatre);
+        outside.setExit("west", pub);
+        outside.setExit("south", lab);
+        theatre.setExit("west", outside);
+        pub.setExit("east", outside);
+        lab.setExit("north", outside);
+        lab.setExit("east", office);
+        office.setExit("west", lab);
 
         currentRoom = outside; // start game outside
     }
@@ -88,13 +92,16 @@ public class Game {
             return false;
         }
 
-        String commandWord = command.getCommandWord();
-        if (commandWord.equals("help"))
+        CommandWord commandWord = cw.getCommandWord(command.getCommandWord());
+
+        if (commandWord == CommandWord.HELP)
             printHelp();
-        else if (commandWord.equals("go"))
+        else if (commandWord == CommandWord.GO)
             goRoom(command);
-        else if (commandWord.equals("quit"))
+        else if (commandWord == CommandWord.QUIT)
             wantToQuit = quit(command);
+        else if (commandWord == CommandWord.LOOK)
+            printLocationInfo();
 
         return wantToQuit;
     }
@@ -110,7 +117,7 @@ public class Game {
         System.out.println("around at the university.");
         System.out.println();
         System.out.println("Your command words are:");
-        System.out.println("   go quit help");
+        System.out.println("   go quit help look");
     }
 
     /**
@@ -129,16 +136,16 @@ public class Game {
         // Try to leave current room.
         Room nextRoom = null;
         if (direction.equals("north")) {
-            nextRoom = currentRoom.northExit;
+            nextRoom = currentRoom.getExit("north");
         }
         if (direction.equals("east")) {
-            nextRoom = currentRoom.eastExit;
+            nextRoom = currentRoom.getExit("east");
         }
         if (direction.equals("south")) {
-            nextRoom = currentRoom.southExit;
+            nextRoom = currentRoom.getExit("south");
         }
         if (direction.equals("west")) {
-            nextRoom = currentRoom.westExit;
+            nextRoom = currentRoom.getExit("west");
         }
 
         if (nextRoom == null) {
@@ -150,17 +157,7 @@ public class Game {
     }
 
     private void printLocationInfo() {
-        System.out.println("You are " + currentRoom.getDescription());
-        System.out.print("Exits: ");
-        if (currentRoom.northExit != null)
-            System.out.print("north ");
-        if (currentRoom.eastExit != null)
-            System.out.print("east ");
-        if (currentRoom.southExit != null)
-            System.out.print("south ");
-        if (currentRoom.westExit != null)
-            System.out.print("west ");
-        System.out.println();
+        System.out.println(currentRoom.getLongDescription());
     }
 
     /**
@@ -176,11 +173,6 @@ public class Game {
         } else {
             return true; // signal that we want to quit
         }
-    }
-
-    public static void main(String[] args) {
-        Game jeu = new Game();
-        jeu.play();
     }
 
 }
