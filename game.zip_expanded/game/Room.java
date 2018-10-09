@@ -25,6 +25,12 @@ public class Room {
         this.exits = new HashMap<String, Room>();
     }
 
+    /**
+     * Getter retournant la pièce située dans une direction de sortie
+     * 
+     * @param direction
+     * @return Room
+     */
     public Room getExit(String direction) {
         Room rep = null;
         if (this.exits != null) {
@@ -33,10 +39,21 @@ public class Room {
         return rep;
     }
 
+    /**
+     * Setter ajouter les pièces et leur sorties dans la HashMap
+     * 
+     * @param direction
+     * @param neighbor
+     */
     public void setExit(String direction, Room neighbor) {
         this.exits.put(direction, neighbor);
     }
 
+    /**
+     * Méthode donnant les différentes direction possible d'une Room
+     * 
+     * @return String chaine
+     */
     public String getExitString() {
         String rep = "Exits : ";
         Set<String> datas = this.exits.keySet();
@@ -53,6 +70,11 @@ public class Room {
         return description;
     }
 
+    /**
+     * Méthode retournant la description complète d'une pièce
+     * 
+     * @return String
+     */
     public String getLongDescription() {
         return "You are " + description + "\r\n" + this.getExitString();
     }

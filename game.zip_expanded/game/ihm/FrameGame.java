@@ -1,7 +1,6 @@
 package ihm;
 
 import java.awt.Button;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 
@@ -13,17 +12,19 @@ import javax.swing.JPanel;
 public class FrameGame extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    private static final Dimension TAILLE_ECRAN = java.awt.Toolkit
-            .getDefaultToolkit().getScreenSize();
-    private static final int HAUTEUR = (int) TAILLE_ECRAN.getHeight();
-    private static final int LARGEUR = (int) TAILLE_ECRAN.getWidth();
+    // private static final Dimension TAILLE_ECRAN = java.awt.Toolkit
+    // .getDefaultToolkit().getScreenSize();
+    // private static final int HAUTEUR = (int) TAILLE_ECRAN.getHeight();
+    // private static final int LARGEUR = (int) TAILLE_ECRAN.getWidth();
 
     public FrameGame() {
         super("Le jeu");
-        this.setSize(HAUTEUR, LARGEUR);
+        // this.setSize(HAUTEUR, LARGEUR);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setUndecorated(true);
+        miseEnPlaceDecor();
         this.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        miseEnPlaceDecor();
     }
 
     private void miseEnPlaceDecor() {
